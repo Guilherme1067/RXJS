@@ -1,6 +1,6 @@
+const{ ajax} = require('rxjs/ajax')
 const {XMLHttpRequest} = require('xmlhttprequest')
-const {ajax} = require('rxjs/ajax')
-const {map, concatAll} = require('rxjs/operators')
+const {map,concatAll, concat} =require('rxjs/operators')
 
 ajax({
     createXHR: () => new XMLHttpRequest(),
@@ -8,7 +8,7 @@ ajax({
 })
 .pipe(
     map(resp => JSON.parse(resp.xhr.responseText)),
-    concatAll(), 
+    concatAll(),
     map(repo => repo.full_name)
 )
 .subscribe(console.log)
