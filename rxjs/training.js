@@ -1,14 +1,17 @@
-const{ ajax} = require('rxjs/ajax')
-const {XMLHttpRequest} = require('xmlhttprequest')
-const {map,concatAll, concat} =require('rxjs/operators')
+const {Observable}=require('rxjs')
 
-ajax({
-    createXHR: () => new XMLHttpRequest(),
-    url: 'https://api.github.com/users/cod3rcursos/repos'
-})
-.pipe(
-    map(resp => JSON.parse(resp.xhr.responseText)),
-    concatAll(),
-    map(repo => repo.full_name)
-)
-.subscribe(console.log)
+function mostraElementos(tempo,...elementos){
+    return new  Observable( subscriber => {
+        (elementos || []).forEach((el,i) => {
+                setTimeout( () =>{
+                 subscriber.next(el)
+
+                 if(elementos.length === i + 1){
+                    subscriber.complete()
+                }
+           }, tempo *(i + 1))
+        })
+    })
+}
+
+mostraElementos(1000,1,2,3).subscribe(console.log)
